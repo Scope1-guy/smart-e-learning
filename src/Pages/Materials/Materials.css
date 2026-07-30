@@ -1,0 +1,71 @@
+.material-group {
+  margin-bottom: 20px;
+}
+
+.material-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.material-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 6px;
+  border-bottom: 1px solid #f4f5fa;
+}
+
+.material-item:last-child {
+  border-bottom: none;
+}
+
+.file-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.file-icon.pdf { background: #e5564d; }
+.file-icon.doc { background: #4d9bff; }
+.file-icon.ppt { background: #ff9f5a; }
+.file-icon.video { background: #5457e5; }
+
+.material-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.material-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.material-meta {
+  font-size: 11px;
+  color: #8b8fa3;
+}
+
+.download-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #f4f5fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #5457e5;
+  flex-shrink: 0;
+}

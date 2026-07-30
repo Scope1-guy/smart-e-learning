@@ -1,0 +1,7 @@
+/* ==================== Content grid ==================== */
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.4fr) minmax(280px, 1fr);
+  gap: 24px;
+  align-items: start;
+}

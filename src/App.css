@@ -1,0 +1,457 @@
+/* ==================== Layout shell ==================== */
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ==================== Main wrapper ==================== */
+.main-wrapper {
+  flex: 1;
+  min-width: 0;
+  padding: 24px 32px 40px;
+}
+
+.col-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.col-side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* ==================== Shared card style ==================== */
+.card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 2px 14px rgba(20, 20, 60, 0.04);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.card-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dropdown {
+  font-size: 13px;
+  color: #8b8fa3;
+  background: #f4f5fa;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.see-all {
+  font-size: 13px;
+  color: #5457e5;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pill-btn {
+  border: none;
+  background: #5457e5;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 16px;
+  border-radius: 20px;
+}
+
+/* ==================== Greeting card ==================== */
+.greeting-card {
+  background: #5457e5;
+  border-radius: 18px;
+  padding: 30px 34px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.greeting-text h1 {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+.greeting-text p {
+  font-size: 14px;
+  opacity: 0.85;
+  max-width: 340px;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+.review-btn {
+  border: none;
+  background: #fff;
+  color: #5457e5;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 10px 22px;
+  border-radius: 10px;
+}
+
+.illustration-placeholder {
+  font-size: 64px;
+  width: 130px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+}
+
+/* ==================== Stats row (Performance + My visit) ==================== */
+.stats-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* ---- Performance card ---- */
+.best-lessons-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #8b8fa3;
+  margin-bottom: 14px;
+}
+
+.score-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.score {
+  font-size: 34px;
+  font-weight: 700;
+  color: #1e1e2d;
+}
+
+.score-label {
+  font-size: 13px;
+  color: #8b8fa3;
+}
+
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  height: 150px;
+}
+
+.bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  gap: 6px;
+}
+
+.bar-value {
+  font-size: 11px;
+  color: #8b8fa3;
+}
+
+.bar {
+  width: 22px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #7477ee, #5457e5);
+}
+
+.bar-label {
+  font-size: 10px;
+  color: #8b8fa3;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ---- My visit (donut) card ---- */
+.donut-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px 10px;
+}
+
+.donut-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.donut {
+  --pct: 50;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: conic-gradient(#5457e5 calc(var(--pct) * 1%), #eef0fa 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.donut::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.donut span {
+  position: relative;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e1e2d;
+}
+
+.donut-item p {
+  font-size: 11px;
+  color: #8b8fa3;
+  line-height: 1.3;
+}
+
+/* ==================== Linked Teachers ==================== */
+.teacher-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.teacher-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.teacher-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.teacher-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.teacher-subject {
+  font-size: 12px;
+  color: #8b8fa3;
+}
+
+.teacher-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.action-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #f4f5fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+/* ==================== Calendar card ==================== */
+.calendar-subtitle {
+  font-size: 12px;
+  color: #8b8fa3;
+  margin-top: -10px;
+  margin-bottom: 16px;
+}
+
+.calendar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.calendar-item {
+  display: grid;
+  grid-template-columns: 40px 3px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.calendar-item .time {
+  font-size: 12px;
+  color: #8b8fa3;
+}
+
+.event-bar {
+  width: 3px;
+  align-self: stretch;
+  border-radius: 2px;
+  background: #eef0fa;
+}
+
+.calendar-item.highlighted .event-bar {
+  background: #5457e5;
+}
+
+.event-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.calendar-item.highlighted .event-info {
+  background: #5457e5;
+  color: #fff;
+}
+
+.event-icon {
+  font-size: 14px;
+}
+
+.event-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.event-time {
+  font-size: 11px;
+  opacity: 0.75;
+}
+
+/* ==================== Upcoming events card ==================== */
+.upcoming-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.upcoming-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.upcoming-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #f4f5fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.upcoming-info {
+  flex: 1;
+}
+
+.upcoming-title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.upcoming-date {
+  font-size: 11px;
+  color: #8b8fa3;
+}
+
+.dots {
+  color: #8b8fa3;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ==================== Responsive ==================== */
+@media (max-width: 1200px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .app {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 16px 20px;
+    overflow-x: auto;
+  }
+
+  .logo {
+    margin-bottom: 0;
+  }
+
+  .nav ul {
+    flex-direction: row;
+  }
+
+  .nav-item span.nav-icon + text {
+    display: none;
+  }
+
+  .logout-btn {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .main-wrapper {
+    padding: 16px;
+  }
+
+  .greeting-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .donut-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bar-chart {
+    height: 120px;
+  }
+}

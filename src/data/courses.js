@@ -1,0 +1,93 @@
+const courses = [
+  {
+    id: 101,
+    userId: 1,
+    title: "Introduction to Algorithms",
+    logo: "🖥",
+    lessonTag: "Programming",
+    lessonProgress: 65,
+    barValue: 85.3,
+  },
+  {
+    id: 102,
+    userId: 1,
+    title: "Database Programming",
+    logo: "🗄",
+    lessonTag: "Database",
+    lessonProgress: 25,
+    barValue: 85.3,
+  },
+  {
+    id: 103,
+    userId: 2,
+    title: "Object Oriented Programming",
+    logo: "🧩",
+    lessonTag: "Programming",
+    lessonProgress: 75,
+    barValue: 85.3,
+  },
+  {
+    id: 104,
+    userId: 2,
+    title: "Web Development Basics",
+    logo: "🌐",
+    lessonTag: "Web",
+    lessonProgress: 85,
+    barValue: 85.3,
+  },
+  {
+    id: 105,
+    userId: 3,
+    title: "Mobile Application Design",
+    logo: "📱",
+    lessonTag: "Mobile",
+    lessonProgress: 65,
+    barValue: 85.3,
+  },
+  {
+    id: 106,
+    userId: 3,
+    title: "Machine Learning Fundamentals",
+    logo: "🤖",
+    lessonTag: "AI",
+    lessonProgress: 35,
+    barValue: 85.3,
+  },
+];
+
+export const lessons = [
+  {
+    id: 1,
+    programId: 1,
+    section: "Getting Started",
+    title: "HTML Basics",
+    date: "2026-08-01",
+    time: "10:00",
+  },
+  {
+    id: 2,
+    programId: 1,
+    section: "Understanding Elements",
+    title: "Semantic Elements",
+    date: "2026-08-01",
+    time: "10:00",
+  },
+  {
+    id: 3,
+    programId: 2,
+    section: "Introduction To CyberSecurity",
+    title: "Information Technology Basics",
+    date: "2026-09-01",
+    time: "12:00",
+  },
+  {
+    id: 4,
+    programId: 3,
+    section: "Getting Started",
+    title: "Data Analysic Fundamental",
+    date: "2026-08-11",
+    time: "09:00",
+  },
+];
+
+export default courses;

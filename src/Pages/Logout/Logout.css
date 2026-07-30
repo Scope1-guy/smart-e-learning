@@ -1,0 +1,60 @@
+.active-logout {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #fff;
+}
+
+.logout-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-overlay {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-card {
+  width: 360px;
+  max-width: 100%;
+  text-align: center;
+  padding: 40px 32px;
+}
+
+.logout-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fdeceb;
+  color: #e5564d;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.logout-card h1 {
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.logout-card p {
+  font-size: 13px;
+  color: #8b8fa3;
+  line-height: 1.5;
+  margin-bottom: 26px;
+}
+
+.logout-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.pill-btn.danger {
+  background: #e5564d;
+}

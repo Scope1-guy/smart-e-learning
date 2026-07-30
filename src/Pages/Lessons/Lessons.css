@@ -1,0 +1,108 @@
+.lessons-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.lesson-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 2px 14px rgba(20, 20, 60, 0.04);
+  display: flex;
+  flex-direction: column;
+}
+
+.lesson-thumb {
+  width: 100%;
+  height: 110px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  margin-bottom: 14px;
+}
+
+.thumb-purple {
+  background: #eceafd;
+}
+.thumb-blue {
+  background: #e6f0ff;
+}
+.thumb-green {
+  background: #e5f8ee;
+}
+.thumb-orange {
+  background: #fff1e5;
+}
+.thumb-pink {
+  background: #ffeaf1;
+}
+.thumb-teal {
+  background: #e3faf6;
+}
+
+.lesson-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: #5457e5;
+  margin-bottom: 8px;
+}
+
+.lesson-card h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.lesson-teacher {
+  font-size: 12px;
+  color: #8b8fa3;
+  margin-bottom: 14px;
+}
+
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.progress-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 4px;
+  background: #eef0fa;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: #5457e5;
+}
+
+.progress-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e1e2d;
+}
+
+.pill-btn.full {
+  width: 100%;
+  text-align: center;
+  padding: 10px 16px;
+}
+
+@media (max-width: 1200px) {
+  .lessons-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .lessons-grid {
+    grid-template-columns: 1fr;
+  }
+}
