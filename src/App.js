@@ -33,7 +33,6 @@ function App() {
         <Route path="materials" element={<Materials />} />
         <Route path="forum" element={<Forum />} />
         <Route path="assessments" element={<Assessments />} />
-        <Route path="settings" element={<Settings />} />
         <Route path="logout" element={<Logout />} />
       </Route>
     </Routes>

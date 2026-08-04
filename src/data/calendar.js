@@ -1,6 +1,6 @@
 const userCalendar = [
   {
-    idid: 1,
+    id: 1,
     userId: 1,
     time: 12,
     eventTitle: "Electronics lesson",
@@ -10,7 +10,7 @@ const userCalendar = [
     eventIcon: "⚡",
   },
   {
-    idid: 1,
+    id: 2,
     userId: 1,
     time: 11,
     eventTitle: "Electronics lesson",
@@ -20,7 +20,7 @@ const userCalendar = [
     eventIcon: "⚡",
   },
   {
-    idid: 1,
+    id: 3,
     userId: 2,
     time: 12,
     eventTitle: "Robotics lesson",
@@ -30,7 +30,7 @@ const userCalendar = [
     eventIcon: "⚡",
   },
   {
-    idid: 1,
+    id: 4,
     userId: 2,
     time: 14,
     eventTitle: "C++ lesson",
@@ -40,7 +40,7 @@ const userCalendar = [
     eventIcon: "⚡",
   },
   {
-    idid: 1,
+    id: 5,
     userId: 3,
     time: 16,
     eventTitle: "PHP lesson",
@@ -50,7 +50,7 @@ const userCalendar = [
     eventIcon: "⚡",
   },
   {
-    idid: 1,
+    id: 6,
     userId: 3,
     time: 16,
     eventTitle: "Graphic Design lesson",

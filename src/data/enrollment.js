@@ -15,10 +15,6 @@ const enrollments = [
     userId: 3,
     programId: 2,
   },
-  {
-    userId: 3,
-    programId: 2,
-  },
 ];
 
 export default enrollments;

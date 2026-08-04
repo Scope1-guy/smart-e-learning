@@ -1,0 +1,420 @@
+SMART E-LEARNING PLATFORM — FULL PROJECT EXPLANATION
+======================================================
+This file explains, from the beginning to the end, how this project works,
+what you built yourself, and what was completed/corrected on top of it.
+Nothing in your file names, folder names, component names, or styling (CSS)
+was changed. Only the JavaScript logic inside files was completed or fixed,
+plus a small amount of new CSS was ADDED (never replacing your existing
+rules) for the one new piece of UI (the signup program picker).
+
+
+PART 1: THE BIG PICTURE
+======================================================
+This app is an e-learning dashboard, styled after the "Smart" design
+(purple/indigo, sidebar on the left, main content on the right). A logged-in
+user sees their own personalized Dashboard, Lessons, Schedule, Materials,
+and Assessments — built from a small set of fake "database" files instead
+of a real backend.
+
+The core idea running through every single page is the same 3-step chain
+you already understood clearly during our conversations:
+
+  1. Who is logged in?              -> AuthContext gives you `user`
+  2. Which programs did they pick?  -> filter enrollments by user.id
+  3. What belongs to those programs? -> filter lessons/materials/assessments
+                                         by those program/lesson ids
+
+Every page in this project (Dashboard, Lessons, Materials, Schedule,
+Assessments) repeats this exact chain. Once you're comfortable with it in
+one file, you're comfortable with it everywhere.
+
+
+PART 2: THE DATA FILES (your fake database)
+======================================================
+Location: src/data/
+
+users.js
+  Holds the fake people (Grace, Samuel, and you — Ayanfe Scope). Each user
+  has a unique `id`, which is the "locker number" every other file uses to
+  know who owns what.
+
+program.js
+  The course catalog — Web Development, CyberSecurity, Data Analysis. This
+  data is shared/global; it's the same for every user, so it does NOT carry
+  a userId.
+
+enrollment.js
+  The "connector" file — one line per (userId, programId) pair, recording
+  who picked which program(s). Since a user can pick multiple programs, and
+  a program can have many users, this connector file is what makes that
+  many-to-many relationship possible.
+
+courses.js
+  This file holds two separate things:
+    - `courses` (default export): an OLDER, now-unused array from an early
+      version of your data model, where a course was tied directly to a
+      userId instead of going through enrollments/programs. It's no longer
+      imported anywhere active — it's just sitting there, harmless. I left
+      it untouched since you asked me not to restructure files, but you can
+      safely ignore or delete it whenever you like.
+    - `lessons` (named export): the REAL, active lessons data. Each lesson
+      belongs to one program (via programId), and is grouped visually by
+      its `section` field.
+
+lessonMaterials.js
+  Files (PDFs etc.) attached to individual lessons, connected via lessonId.
+
+userAssessment.js
+  Each user's due date / score / status for a specific lesson, connected
+  via BOTH userId and lessonId (since this data is personal to one user,
+  for one lesson — unlike lessons themselves, which are shared).
+
+teachers.js
+  Teachers linked directly to a userId (a simpler, direct relationship,
+  since this data doesn't need to travel through programs).
+
+calendar.js
+  Calendar/task events tied directly to a userId.
+
+forum.js
+  Left empty/unused, exactly as agreed — Forum was intentionally left for
+  a future session.
+
+components/data/user.js
+  This is a small leftover file from earlier in the project. It is NOT
+  imported or used anywhere in the app anymore (your real user data lives
+  in src/data/users.js). It's harmless sitting there, but you can delete it
+  whenever you like — it does nothing right now.
+
+
+PART 3: AUTHENTICATION — Context/AuthContext.js
+======================================================
+This is the "brain" of who's logged in, and now also handles signup.
+
+What it holds:
+  - user      -> the currently logged-in person (or null)
+  - error     -> a message to show when login/signup fails
+  - allUsers  -> ALL users, starting as a copy of your users.js file, but
+                 kept in React state (useState) so new signups can be added
+                 to it while the app is running
+  - enrollments -> ALL enrollment records, same idea — starts as a copy of
+                 your enrollment.js file, but lives in state so new signups
+                 can add their own enrollment lines
+
+login(email, password)
+  Unchanged from what you built — searches allUsers for a match, sets
+  `user` on success, sets an error message on failure.
+
+signup(formData, selectedProgramIds)  <-- THIS IS NEW
+  This is what makes your "pick courses during signup" idea actually work:
+    1. Checks the email isn't already taken (using .some(), a cousin of
+       .find() that just returns true/false instead of the actual match)
+    2. Checks at least one program was selected
+    3. Works out a brand-new unique id for the new user by taking the
+       highest existing id and adding 1: Math.max(...allUsers.map(u => u.id)) + 1
+    4. Builds the new user object and adds it to allUsers
+    5. Builds one enrollment object per selected program (same shape as
+       your existing enrollment.js entries) and adds them to enrollments
+    6. Logs the new user in immediately (setUser)
+
+IMPORTANT — why enrollments now live in Context instead of being imported
+directly from data/enrollment.js in every page:
+  Before, Dashboard/Lessons/Materials/Assessments each did:
+      import enrollments from "../../data/enrollment";
+  That only ever reads the ORIGINAL file, frozen in time. If a new user
+  signed up, their enrollment lines would never show up anywhere, because
+  every page was reading the old, unchanging file instead of the live,
+  in-memory list. Now, every page instead does:
+      const { user, enrollments } = useContext(AuthContext);
+  So they always see the current, up-to-date list — including brand new
+  signups — without needing to touch the original data file at all.
+
+
+PART 4: THE SIGNUP FLOW — Pages/Login/Auth.js
+======================================================
+This was the main missing piece. Previously, Signup only collected name,
+email and password, and didn't actually create an account — it just
+console.logged the form data.
+
+What was added:
+  - A `selectedPrograms` state (an array of program ids), toggled with a
+    `toggleProgram(id)` function — the exact same "add if missing, remove
+    if present" pattern you already know:
+        selectedPrograms.includes(id)
+          ? selectedPrograms.filter(p => p !== id)   // remove it
+          : [...selectedPrograms, id]                // add it
+  - A grid of clickable program cards (imported from data/program.js),
+    rendered only when isLogin is false — same {!isLogin && (...)} pattern
+    you already used for the "Full Name" field.
+  - On submit, if in signup mode, it now calls the real `signup()` function
+    from AuthContext instead of just logging to the console, and navigates
+    to the Dashboard on success.
+  - New CSS was ADDED (not replacing anything) to Auth.css for the new
+    `.program-picker`, `.program-grid`, `.program-card`, and
+    `.program-card.selected` classes, matching your existing purple
+    (#5b5fc7) design language.
+
+Try it: sign up as a new person, pick two or three programs, and you'll
+land on a Dashboard that's already populated with real lessons/materials
+for exactly the programs you picked — because the whole chain (user ->
+enrollments -> programs -> lessons -> materials/assessments) now works
+end to end for brand-new accounts too, not just Grace and Samuel.
+
+
+PART 5: WHAT WAS CORRECTED, FILE BY FILE
+======================================================
+Below is every fix made, and why.
+
+--- src/data/users.js ---
+BUG: You (Ayanfe Scope) and Grace both had `id: 1`. Since ids are how
+every other file identifies a user, two people sharing one id is a real
+bug — anything checking `userId === 1` would incorrectly also match you.
+FIX: Your id was changed to 3, matching what enrollment.js and teachers.js
+were already expecting (they already referenced userId 3 for you — this
+tells me the intended id was always 3, just not applied to users.js yet).
+
+BUG: `phoneNUmber` had a typo (capital U). This isn't just cosmetic — code
+elsewhere trying to read `user.phoneNumber` (the correct spelling) would
+get `undefined`, since JavaScript treats `phoneNUmber` and `phoneNumber`
+as two completely different property names.
+FIX: Renamed to `phoneNumber` everywhere, and updated the one place that
+displayed it (Settings.js) to match.
+
+--- src/data/enrollment.js ---
+BUG: The line `{ userId: 3, programId: 2 }` was written twice — an exact
+duplicate that added nothing.
+FIX: Removed the duplicate, kept one copy.
+
+--- src/data/calendar.js ---
+BUG: Every single calendar entry had the same key: `idid: 1` (both a typo
+of `id`, and not unique — all six entries said `idid: 1`).
+FIX: Renamed to `id`, and gave each entry its own unique number (1 through
+6), so React can correctly tell each calendar row apart when rendering the
+list (this is what the `key` prop needs).
+
+--- src/App.js ---
+BUG: The Settings route was declared twice:
+      <Route path="settings" element={<Settings />} />
+      ...
+      <Route path="settings" element={<Settings />} />
+FIX: Removed the duplicate line.
+
+--- src/components/SideBar/sidebar.js ---
+BUG: The "highlight the active link" logic used a useState variable
+(`activePage`) that was compared against the whole clicked item object,
+but React Router's NavLink already has its own working way to know which
+link is active — the code was fighting against a feature that already
+existed, and as a result, the highlighting never actually worked correctly.
+FIX: Removed the custom useState entirely, and used NavLink's own built-in
+`isActive` (passed into the className function), the same approach we
+used together earlier when first building the sidebar.
+
+BUG: The "Log Out" button in the sidebar had no onClick at all — clicking
+it did nothing.
+FIX: Wired it to navigate to the "logout" route (`navigate("logout")`),
+which shows your existing Logout confirmation page.
+
+--- src/Pages/Logout/Logout.js ---
+BUG (same one you and I caught earlier in our conversation, but it had
+crept back into this file): it wrapped its content in
+`<div className="app"><div className="main-wrapper">`, duplicating the
+wrapper that Layout.js already provides around every page. This creates
+nested wrapper divs, which can throw off CSS sizing/spacing.
+FIX: Removed the duplicate wrapper, kept only the page's own content.
+
+BUG: Neither the "Cancel" nor "Log out" buttons had an onClick — clicking
+either one did nothing.
+FIX: "Cancel" now calls `navigate(-1)` (goes back to whatever page you were
+on before). "Log out" now calls the real `logout()` function from
+AuthContext (which clears `user`, so ProtectedRoute will correctly bounce
+you to /auth) and then navigates you to "/auth".
+
+--- src/Pages/Settings/Settings.js ---
+BUG: Same duplicate-wrapper issue as Logout.js.
+FIX: Removed the duplicate `app`/`main-wrapper` divs.
+
+BUG: Read `user.name`, `user.email`, `user.phoneNUmber`, `user.dob`
+directly, without any protection — if this page ever rendered before
+`user` was set, it would crash (same "reading a property off null" issue
+we talked through earlier).
+FIX: Added `?.` (optional chaining) to all four, and updated the phone
+number field name to match the corrected `phoneNumber` spelling.
+
+--- src/Pages/Assessment/Assessments.js ---
+This file had the most significant bug in the whole project.
+
+BUG #1 (duplicate wrapper): Same `app`/`main-wrapper` issue as Logout and
+Settings.
+
+BUG #2 (the big one — comparing the wrong kind of ID): The original code
+did this:
+      const assessments = myAssessment.find((a) => a.lessonId === program.id);
+This compares a LESSON id to a PROGRAM id — two completely different
+"kinds" of number that just happen to overlap by coincidence (lesson id 1
+and program id 1 are not the same thing, exactly like we discussed when
+you asked "if I want to know the program a user picked, do I check if
+userId equals programId" — the answer was no then, and the same rule
+applies here). Because of this mismatch, the assessment lookup could
+either silently return the wrong record, or return nothing at all
+(undefined) — and since the next line does `assessments.score` with no
+safety check, this would crash the moment there was no match.
+FIX: The table now correctly walks the full chain: user -> enrollments ->
+programs -> LESSONS (not just programs), and for each lesson, looks up
+the matching assessment using BOTH the right id (`a.lessonId ===
+lesson.id`) — matching lesson-to-lesson, not lesson-to-program. Each table
+row now shows a real lesson title, its real program, its real due date,
+status, and score (or "—" if no assessment exists yet for that lesson,
+using the same safe `?.` pattern you've used elsewhere).
+
+BUG #3 (hardcoded summary numbers): "Average score: 87%", "Completed: 14",
+"Upcoming: 3", "Missed: 1" were all typed-in fixed numbers, the same for
+every single user.
+FIX: These are now calculated live from the logged-in user's real
+assessment data:
+  - Average score: adds up every scored assessment and divides by how many
+    there are (a "sum then divide" pattern — new, but simple).
+  - Completed: counts assessments where status is exactly "Completed".
+  - Upcoming / Missed: compares each assessment's due date against today's
+    date using JavaScript's built-in Date object (`new Date(dueDate) >=
+    new Date()` means the due date hasn't arrived yet = upcoming; otherwise,
+    if it's not completed, it's counted as missed). This is a small new
+    concept beyond what we've covered before — comparing two Date objects
+    with > or < works the same as comparing numbers, because JavaScript
+    converts dates into a timestamp number behind the scenes for the
+    comparison.
+
+--- src/Pages/Materials/Materials.js ---
+BUG: The material card displayed `{material.fileUrl}` (something like
+"/materials/html-basics-slides.pdf") as if it were the readable title,
+instead of `{material.title}` (something like "HTML Basics - Slides").
+There was also a stray empty `<p></p>` sitting above it doing nothing.
+FIX: Now correctly displays `material.title`, and the empty paragraph was
+removed.
+
+BUG: Read enrollments directly from the data file (see Part 3's
+explanation of why that's a problem for new signups).
+FIX: Now reads `enrollments` from AuthContext instead.
+
+--- src/Pages/Lessons/Lessons.js ---
+Cleanup only, no functional bug: removed an unused `courses` import (the
+old, superseded data shape from courses.js that was never actually used
+in this file), removed leftover console.log lines, and removed a large
+block of old commented-out draft code that was no longer needed now that
+the real dynamic version works. Also switched to reading `enrollments`
+from AuthContext instead of the static file.
+
+--- src/Pages/Dashboard/Content Grid/Col-main/col-main.js ---
+Cleanup: removed console.log lines and a commented-out dead line.
+Switched to reading `enrollments` from context.
+
+IMPROVEMENT: The greeting card said "You have X new tasks" with a literal
+letter X, always the same for every user. It now counts how many of the
+user's lessons don't yet have a "Completed" assessment, and shows that
+real number instead.
+
+IMPROVEMENT: The "Performance" card's headline score (previously hardcoded
+as "95.4 — Introduction to programming" for everyone) now finds whichever
+lesson has the HIGHEST score for the logged-in user, and displays that
+lesson's real title and score instead.
+
+IMPROVEMENT: The "My visit" donut chart was six hardcoded percentages/
+labels, identical for every user, completely disconnected from any real
+data. It now maps over the user's own lessons and assessments (the same
+pattern already used for the bar chart right next to it), so the donuts
+show real per-lesson scores for whoever is logged in.
+
+--- src/Pages/Dashboard/Content Grid/Col-Side/col-side.js ---
+BUG: Missing `key` prop on both the calendar list items and the upcoming
+events list items (React needs a unique `key` on every item produced by
+.map(), so it can tell which item is which across re-renders). Without it,
+React just prints a warning in the console, but it's still worth fixing.
+FIX: Added `key={cal.id}` (now that calendar.js has real unique ids) and
+`key={index}` for the upcoming events list (fine here since that list is
+fixed/static and never reorders).
+
+--- src/Pages/Schedule/Schedule.js ---
+BEFORE: This page was entirely hardcoded — seven fixed `<div>` event
+blocks with made-up titles/times, identical for every single user,
+completely disconnected from any of your real lesson data.
+AFTER: The event blocks are now generated from the logged-in user's real
+lessons (same enrollments -> programs -> lessons chain as every other
+page), positioned automatically on the weekly grid based on each lesson's
+own `date` and `time` fields:
+  - The COLUMN (which day) is worked out using JavaScript's built-in
+    `new Date(lesson.date).getDay()`, which returns a number for the day
+    of the week (0 = Sunday, 1 = Monday, and so on up to 6 = Saturday).
+    Since the grid's columns go Monday first, Sunday last, Sunday (0) gets
+    specially mapped to the last column instead of the first.
+  - The ROW (which hour) is worked out by reading the hour out of the
+    lesson's time string (e.g. "10:00" -> 10), then converting that into
+    the correct grid row to line up with the 08:00-16:00 hour labels
+    already on the page.
+  - Colors cycle through the four existing color classes (purple, blue,
+    green, orange) already defined in Schedule.css, one per lesson, using
+    `index % 4` (index remainder 4), so the colors repeat in a cycle if
+    there are more than four lessons.
+This is a slightly new idea beyond what we'd covered before (reading a day
+of the week out of a date), but it follows the exact same "filter by
+matching id, then map to display" shape as everything else — it just adds
+one extra calculation (which day/row a lesson lands on) before rendering.
+
+
+PART 6: THE ARRAY METHODS USED THROUGHOUT (quick reference)
+======================================================
+.filter()  -> keeps items that pass a yes/no test. Result can be smaller
+              than the original list, or the same size, but never bigger.
+              Used everywhere to narrow down "all X" into "just this
+              user's X".
+
+.map()     -> transforms every item into something else. Result is always
+              the same length as the original. Used both to reshape data
+              (e.g. pulling just programId out of an enrollment) AND to
+              turn data into actual JSX elements on screen.
+
+.find()    -> returns the FIRST single item that matches, or undefined if
+              none match. Used whenever we want exactly one related item
+              (one assessment for this lesson, one program for this
+              lesson), not a list of them.
+
+.some()    -> new in this pass, used once in signup() to check "does any
+              user already have this email?" It works like .find(), but
+              instead of giving you the matching item, it just gives you
+              true or false.
+
+.includes()-> asks "is this specific value inside this list?" Used to
+              check whether a lesson's programId is one of the ids this
+              user is enrolled in.
+
+
+PART 7: WHAT'S STILL LEFT FOR LATER (on purpose)
+======================================================
+- Forum page: left exactly as it was, static placeholder content, since
+  you specifically asked to leave this for a future session.
+- Settings page: the toggle switches, tabs, and "Save changes"/"Edit
+  details" buttons are still just visual (no logic wired to them yet) —
+  also left for a future session, as discussed.
+- Data doesn't persist after a refresh: new signups, and anything else
+  stored in AuthContext's state, will reset the moment you refresh the
+  page or restart the app, since none of this is saved to a real database
+  yet — this was always the agreed plan for this stage of the project
+  (fake, in-memory data, matching how we built the very first users.js
+  together).
+
+
+PART 8: HOW TO TEST WHAT WAS DONE
+======================================================
+1. Log in as Grace (grace@fake.com / grace011) — Dashboard, Lessons,
+   Materials, Schedule, and Assessments should all show HER real Web
+   Development + CyberSecurity data.
+2. Log in as Samuel (sam@fake.com / samsam011) — should see only HIS own
+   Web Development data, completely different from Grace's.
+3. Sign up as a brand new person, pick one or more programs on the new
+   picker grid, and confirm you land on a Dashboard already showing real
+   lessons for whatever you picked.
+4. Click "Log Out" in the sidebar — should take you to the Logout
+   confirmation page. Click "Log out" there — should actually log you out
+   and send you to /auth. Click "Cancel" instead — should just take you
+   back to where you were.
+5. While logged out, try typing /settings or /profile directly into the
+   browser's address bar — you should still get bounced to /auth, exactly
+   as ProtectedRoute is designed to do.

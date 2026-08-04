@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 import { Logo } from "../../components/SideBar/sidebar";
+import programs from "../../data/program";
 import "./Auth.css";
 
 function Auth() {
@@ -11,12 +12,21 @@ function Auth() {
     email: "",
     password: "",
   });
+  const [selectedPrograms, setSelectedPrograms] = useState([]);
   const navigate = useNavigate();
 
-  const { login, error } = useContext(AuthContext);
+  const { login, signup, error } = useContext(AuthContext);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const toggleProgram = (programId) => {
+    setSelectedPrograms((prev) =>
+      prev.includes(programId)
+        ? prev.filter((id) => id !== programId)
+        : [...prev, programId]
+    );
   };
 
   const handleSubmit = (e) => {
@@ -28,21 +38,22 @@ function Auth() {
         navigate("/");
       }
     } else {
-      console.log(isLogin ? "Logging in..." : "Signing up...", formData);
+      const success = signup(formData, selectedPrograms);
+      if (success) {
+        navigate("/");
+      }
     }
   };
 
   const toggleMode = () => {
     setIsLogin(!isLogin);
     setFormData({ name: "", email: "", password: "" }); // clear fields on switch
+    setSelectedPrograms([]);
   };
 
   return (
     <div className="auth-page">
       <div className="auth-brand">
-        {/* <div className="auth-logo">
-          <span className="logo-dot"></span> Smart
-        </div> */}
         <Logo />
         <h2>{isLogin ? "Welcome back!" : "Join us today!"}</h2>
         <p>
@@ -95,7 +106,28 @@ function Auth() {
             required
           />
 
-          {isLogin && error && <p className="auth-error">{error}</p>}
+          {!isLogin && (
+            <div className="program-picker">
+              <label>Choose your program(s)</label>
+              <div className="program-grid">
+                {programs.map((program) => (
+                  <div
+                    key={program.id}
+                    className={
+                      selectedPrograms.includes(program.id)
+                        ? "program-card selected"
+                        : "program-card"
+                    }
+                    onClick={() => toggleProgram(program.id)}
+                  >
+                    {program.title}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {error && <p className="auth-error">{error}</p>}
 
           <button type="submit" className="auth-btn">
             {isLogin ? "Log In" : "Create Account"}

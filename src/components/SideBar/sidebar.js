@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./sidebar.css";
 
 const sidebarLinks = [
@@ -32,8 +31,6 @@ export function Logo() {
 }
 
 function Nav() {
-  const [activePage, setActivePage] = useState("Dashboard");
-
   return (
     <nav className="nav">
       <ul>
@@ -42,8 +39,9 @@ function Nav() {
             key={item.path}
             to={item.path}
             end={item.path === "/"}
-            className={activePage === item ? "nav-item active" : "nav-item"}
-            onClick={() => setActivePage(item)}
+            className={({ isActive }) =>
+              isActive ? "nav-item active" : "nav-item"
+            }
           >
             <span className="nav-icon">▦</span>
             {item.label}
@@ -53,9 +51,12 @@ function Nav() {
     </nav>
   );
 }
+
 function LogoutButton() {
+  const navigate = useNavigate();
+
   return (
-    <button className="logout-btn">
+    <button className="logout-btn" onClick={() => navigate("logout")}>
       <span className="nav-icon">⏻</span>
       Log Out
     </button>

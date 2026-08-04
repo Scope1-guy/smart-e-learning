@@ -1,8 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../../../../Context/AuthContext";
-import courses from "../../../../data/courses";
 import teachers from "../../../../data/teachers";
-import enrollments from "../../../../data/enrollment";
 import { lessons } from "../../../../data/courses";
 import assessments from "../../../../data/userAssessment";
 
@@ -28,13 +26,28 @@ export default function ColMain() {
 }
 
 function GreetingCard() {
-  const { user } = useContext(AuthContext);
+  const { user, enrollments } = useContext(AuthContext);
+
+  const myEnrollments = enrollments.filter((e) => e.userId === user.id);
+  const myProgramIds = myEnrollments.map((e) => e.programId);
+  const myLessons = lessons.filter((lesson) =>
+    myProgramIds.includes(lesson.programId)
+  );
+  const myAssessments = assessments.filter((a) => a.userId === user.id);
+
+  // "New" tasks = lessons that don't have a completed assessment yet
+  const newTaskCount = myLessons.filter((lesson) => {
+    const assessment = myAssessments.find((a) => a.lessonId === lesson.id);
+    return !assessment || assessment.status !== "Completed";
+  }).length;
+
   return (
     <section className="greeting-card">
       <div className="greeting-text">
         <h1>Hello {user.name.split(" ")[0]}!</h1>
         <p>
-          You have X new tasks. It is a lot of work for today! So let's start!
+          You have {newTaskCount} new task{newTaskCount === 1 ? "" : "s"}. It is
+          a lot of work for today! So let's start!
         </p>
         <button className="review-btn">review it</button>
       </div>
@@ -46,23 +59,37 @@ function GreetingCard() {
 }
 
 function PerformanceCard() {
-  const { user } = useContext(AuthContext);
+  const { user, enrollments } = useContext(AuthContext);
 
   const myEnrollments = enrollments.filter((e) => e.userId === user.id);
   const myProgramIds = myEnrollments.map((e) => e.programId);
   const myLessons = lessons.filter((lesson) =>
     myProgramIds.includes(lesson.programId)
   );
-  const myAsessments = assessments.filter((a) => a.userId === user.id);
+  const myAssessments = assessments.filter((a) => a.userId === user.id);
 
-  console.log("Enrollements:", myEnrollments);
-  console.log("programid:", myProgramIds);
-  console.log("Lesson:", myLessons);
-  console.log("assessment:", myAsessments);
+  console.log("my enrollment", myEnrollments);
+  console.log("my program id", myProgramIds);
+  console.log("my lessons", myLessons);
+  console.log("my assessment", myAssessments);
 
-  // const currentUserPerformance = courses.filter(
-  //   (cur) => cur.userId === user.id
-  // );
+  // Find the lesson with the highest score, to headline the card
+  const scoredLessons = myLessons
+    .map((lesson) => ({
+      lesson,
+      assessment: myAssessments.find((a) => a.lessonId === lesson.id),
+    }))
+    .filter((item) => item.assessment);
+
+  console.log("scored lessons", scoredLessons);
+
+  const topEntry = scoredLessons.reduce(
+    (best, item) =>
+      !best || item.assessment.score > best.assessment.score ? item : best,
+    null
+  );
+
+  console.log(topEntry);
 
   return (
     <section className="card performance-card">
@@ -79,19 +106,25 @@ function PerformanceCard() {
       </div>
 
       <div className="score-row">
-        <span className="score">95.4</span>
-        <span className="score-label">Introduction to programming</span>
+        <span className="score">
+          {topEntry ? topEntry.assessment.score : 0}
+        </span>
+        <span className="score-label">
+          {topEntry ? topEntry.lesson.title : "No lessons yet"}
+        </span>
       </div>
 
       <div className="bar-chart">
         {myLessons.map((lesson) => {
-          const assessment = myAsessments.find((a) => a.lessonId === lesson.id);
+          const assessment = myAssessments.find(
+            (a) => a.lessonId === lesson.id
+          );
           return (
-            <div className="bar-item">
+            <div className="bar-item" key={lesson.id}>
               <span className="bar-value">{assessment?.score ?? 0}%</span>
               <div
                 className="bar"
-                style={{ height: `${assessment?.score}%` }}
+                style={{ height: `${assessment?.score ?? 0}%` }}
               />
               <span className="bar-label">{lesson.title}</span>
             </div>
@@ -103,6 +136,15 @@ function PerformanceCard() {
 }
 
 function VisitCard() {
+  const { user, enrollments } = useContext(AuthContext);
+
+  const myEnrollments = enrollments.filter((e) => e.userId === user.id);
+  const myProgramIds = myEnrollments.map((e) => e.programId);
+  const myLessons = lessons.filter((lesson) =>
+    myProgramIds.includes(lesson.programId)
+  );
+  const myAssessments = assessments.filter((a) => a.userId === user.id);
+
   return (
     <section className="card visit-card">
       <div className="card-header">
@@ -113,42 +155,20 @@ function VisitCard() {
       </div>
 
       <div className="donut-grid">
-        <div className="donut-item">
-          <div className="donut" style={{ "--pct": 92 }}>
-            <span>92%</span>
-          </div>
-          <p>Algorithms structures</p>
-        </div>
-        <div className="donut-item">
-          <div className="donut" style={{ "--pct": 83 }}>
-            <span>83%</span>
-          </div>
-          <p>Object program.</p>
-        </div>
-        <div className="donut-item">
-          <div className="donut" style={{ "--pct": 78 }}>
-            <span>78%</span>
-          </div>
-          <p>Database program.</p>
-        </div>
-        <div className="donut-item">
-          <div className="donut" style={{ "--pct": 97 }}>
-            <span>97%</span>
-          </div>
-          <p>Web develop.</p>
-        </div>
-        <div className="donut-item">
-          <div className="donut" style={{ "--pct": 96 }}>
-            <span>96%</span>
-          </div>
-          <p>Mobile application</p>
-        </div>
-        <div className="donut-item">
-          <div className="donut" style={{ "--pct": 89 }}>
-            <span>89%</span>
-          </div>
-          <p>Machine learning</p>
-        </div>
+        {myLessons.map((lesson) => {
+          const assessment = myAssessments.find(
+            (a) => a.lessonId === lesson.id
+          );
+          const pct = assessment?.score ?? 0;
+          return (
+            <div className="donut-item" key={lesson.id}>
+              <div className="donut" style={{ "--pct": pct }}>
+                <span>{pct}%</span>
+              </div>
+              <p>{lesson.title}</p>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
@@ -176,7 +196,7 @@ export function MonthSelection() {
 function TeacherCard() {
   const { user } = useContext(AuthContext);
 
-  const linkedTecahers = teachers.filter(
+  const linkedTeachers = teachers.filter(
     (teacher) => teacher.userId === user.id
   );
   return (
@@ -187,7 +207,7 @@ function TeacherCard() {
       </div>
 
       <ul className="teacher-list">
-        {linkedTecahers.map((info) => (
+        {linkedTeachers.map((info) => (
           <li className="teacher-item" key={info.id}>
             <div className="teacher-info">
               <div className="avatar small" />

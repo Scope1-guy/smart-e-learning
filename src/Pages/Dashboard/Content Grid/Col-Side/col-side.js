@@ -6,7 +6,7 @@ import userCalendar from "../../../../data/calendar";
 const upcomingList = [
   {
     icon: "🎮",
-    eventName: `The main event in your life &quot;Robot Fest&quot; will be coming soon...`,
+    eventName: `The main event in your life &quot; Robot Fest &quot; will be coming soon...`,
     date: "12th, December, 2026",
     time: "12:00",
     amPm: "pm",
@@ -48,6 +48,7 @@ function CalendarCard() {
       <ul className="calendar-list">
         {calendarTasks.map((cal) => (
           <li
+            key={cal.id}
             className={
               activeLesson === cal
                 ? "calendar-item highlighted"
@@ -83,8 +84,8 @@ function UpcomingEvent() {
       </div>
 
       <ul className="upcoming-list">
-        {upcomingList.map((up) => (
-          <li className="upcoming-item">
+        {upcomingList.map((up, index) => (
+          <li className="upcoming-item" key={index}>
             <div className="upcoming-icon">{up.icon}</div>
             <div className="upcoming-info">
               <p className="upcoming-title">{up.eventName}</p>

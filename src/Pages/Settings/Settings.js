@@ -6,34 +6,31 @@ import "./Settings.css";
 
 function Settings() {
   return (
-    <div className="app">
-      {/* ---------- Main content wrapper ---------- */}
-      <div className="main-wrapper">
-        {/* Page heading */}
-        <div className="page-heading">
-          <div>
-            <h1>Settings</h1>
-            <p>Manage your account and preferences</p>
-          </div>
-        </div>
-
-        <div className="settings-layout">
-          {/* Settings tabs */}
-          <nav className="settings-tabs card">
-            <ul>
-              <li className="settings-tab active">Profile</li>
-              <li className="settings-tab">Account</li>
-              <li className="settings-tab">Notifications</li>
-              <li className="settings-tab">Security</li>
-              <li className="settings-tab">Appearance</li>
-            </ul>
-          </nav>
-
-          {/* Settings content */}
-          <SettingContent />
+    <>
+      {/* Page heading */}
+      <div className="page-heading">
+        <div>
+          <h1>Settings</h1>
+          <p>Manage your account and preferences</p>
         </div>
       </div>
-    </div>
+
+      <div className="settings-layout">
+        {/* Settings tabs */}
+        <nav className="settings-tabs card">
+          <ul>
+            <li className="settings-tab active">Profile</li>
+            <li className="settings-tab">Account</li>
+            <li className="settings-tab">Notifications</li>
+            <li className="settings-tab">Security</li>
+            <li className="settings-tab">Appearance</li>
+          </ul>
+        </nav>
+
+        {/* Settings content */}
+        <SettingContent />
+      </div>
+    </>
   );
 }
 
@@ -60,19 +57,19 @@ function SettingContent() {
         <div className="form-grid">
           <label className="form-field">
             <span>Full name</span>
-            <input type="text" defaultValue={user.name} readOnly />
+            <input type="text" defaultValue={user?.name} readOnly />
           </label>
           <label className="form-field">
             <span>Email address</span>
-            <input type="email" defaultValue={user.email} readOnly />
+            <input type="email" defaultValue={user?.email} readOnly />
           </label>
           <label className="form-field">
             <span>Phone number</span>
-            <input type="text" defaultValue={user.phoneNUmber} readOnly />
+            <input type="text" defaultValue={user?.phoneNumber} readOnly />
           </label>
           <label className="form-field">
             <span>Date of birth</span>
-            <input type="text" defaultValue={user.dob} readOnly />
+            <input type="text" defaultValue={user?.dob} readOnly />
           </label>
         </div>
 

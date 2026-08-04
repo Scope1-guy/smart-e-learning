@@ -56,6 +56,29 @@
   font-size: 11px;
 }
 
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge.completed {
+  background: #e6f9f2;
+  color: #1a9c72;
+}
+
+.badge.inprogress {
+  background: #fff4e5;
+  color: #c97a1a;
+}
+
+.badge.pending {
+  background: #f1f1f6;
+  color: #8b8fa3;
+}
+
 @media (max-width: 900px) {
   .summary-row {
     grid-template-columns: repeat(2, 1fr);

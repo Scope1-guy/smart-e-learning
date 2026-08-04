@@ -4,7 +4,7 @@ const assessments = [
     userId: 1,
     lessonId: 1,
     dueDate: "2026-08-05",
-    score: 85,
+    score: 100,
     status: "Completed",
   },
   {
@@ -21,6 +21,14 @@ const assessments = [
     lessonId: 1,
     dueDate: "2026-08-05",
     score: 95,
+    status: "Completed",
+  },
+  {
+    id: 4,
+    userId: 1,
+    lessonId: 3,
+    dueDate: "2026-08-05",
+    score: 5,
     status: "Completed",
   },
 ];

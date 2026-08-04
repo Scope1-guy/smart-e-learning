@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../../Context/AuthContext";
+import { lessons } from "../../data/courses";
 import "../Shell.css";
 import "./Schedule.css";
+
+const eventColors = ["purple", "blue", "green", "orange"];
 
 function Schedule() {
   return (
@@ -32,6 +36,14 @@ function SchedulePageHeading() {
 }
 
 function WeeklyCalendarCard() {
+  const { user, enrollments } = useContext(AuthContext);
+
+  const myEnrollments = enrollments.filter((e) => e.userId === user.id);
+  const myProgramIds = myEnrollments.map((e) => e.programId);
+  const myLessons = lessons.filter((lesson) =>
+    myProgramIds.includes(lesson.programId)
+  );
+
   return (
     <section className="card schedule-card">
       <div className="week-grid">
@@ -107,62 +119,30 @@ function WeeklyCalendarCard() {
           />
         ))}
 
-        {/* Hardcoded event blocks */}
-        <div
-          className="event-block purple"
-          style={{ gridColumn: 2, gridRow: "2 / 4" }}
-        >
-          <p className="event-block-title">Electronics</p>
-          <p className="event-block-time">8:00 - 9:45</p>
-        </div>
+        {/* Lesson event blocks, placed using each lesson's own date + time */}
+        {myLessons.map((lesson, index) => {
+          // getDay() returns 0 for Sunday, 1 for Monday, ... 6 for Saturday.
+          // Our columns go Mon(2) -> Sun(8), so Sunday needs to map to 8.
+          const dayOfWeek = new Date(lesson.date).getDay();
+          const gridColumn = dayOfWeek === 0 ? 8 : dayOfWeek + 1;
 
-        <div
-          className="event-block blue"
-          style={{ gridColumn: 3, gridRow: "3 / 5" }}
-        >
-          <p className="event-block-title">Robotics lesson</p>
-          <p className="event-block-time">9:00 - 10:45</p>
-        </div>
+          const hour = parseInt(lesson.time.split(":")[0], 10);
+          const gridRow = hour - 6; // 08:00 -> row 2, 09:00 -> row 3, etc.
 
-        <div
-          className="event-block green"
-          style={{ gridColumn: 4, gridRow: "5 / 7" }}
-        >
-          <p className="event-block-title">Database program.</p>
-          <p className="event-block-time">11:00 - 12:45</p>
-        </div>
+          // Only place it on the grid if it falls within the visible 08:00-16:00 range
+          if (gridRow < 2 || gridRow > 10) return null;
 
-        <div
-          className="event-block orange"
-          style={{ gridColumn: 5, gridRow: "4 / 6" }}
-        >
-          <p className="event-block-title">Web development</p>
-          <p className="event-block-time">10:00 - 11:45</p>
-        </div>
-
-        <div
-          className="event-block purple"
-          style={{ gridColumn: 6, gridRow: "6 / 8" }}
-        >
-          <p className="event-block-title">C++ lesson</p>
-          <p className="event-block-time">12:00 - 13:45</p>
-        </div>
-
-        <div
-          className="event-block blue"
-          style={{ gridColumn: 3, gridRow: "7 / 9" }}
-        >
-          <p className="event-block-title">Machine learning</p>
-          <p className="event-block-time">13:00 - 14:45</p>
-        </div>
-
-        <div
-          className="event-block green"
-          style={{ gridColumn: 7, gridRow: "3 / 5" }}
-        >
-          <p className="event-block-title">Mobile app design</p>
-          <p className="event-block-time">9:00 - 10:45</p>
-        </div>
+          return (
+            <div
+              key={lesson.id}
+              className={`event-block ${eventColors[index % eventColors.length]}`}
+              style={{ gridColumn, gridRow: `${gridRow} / ${gridRow + 2}` }}
+            >
+              <p className="event-block-title">{lesson.title}</p>
+              <p className="event-block-time">{lesson.time}</p>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
